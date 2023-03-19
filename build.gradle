@@ -1,0 +1,166 @@
+buildscript {
+    repositories {
+        mavenCentral()
+        maven { url = "https://files.minecraftforge.net/maven" }
+        maven {
+            name = 'sponge'
+            url = 'https://repo.spongepowered.org/maven'
+        }
+        repositories {
+            maven {
+                url "https://plugins.gradle.org/m2/"
+
+            }
+        }
+    }
+    dependencies {
+        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '5.1.+', changing: true
+        classpath 'org.spongepowered:mixingradle:0.7.32'
+    }
+}
+
+//Gradle Plugins
+plugins {
+    id "com.matthewprenger.cursegradle" version "1.4.0"
+    id 'java'
+    id "com.modrinth.minotaur" version "2.1.2"
+    id 'com.github.johnrengelman.shadow' version '7.1.2'
+}
+apply plugin: 'net.minecraftforge.gradle'
+apply plugin: 'eclipse'
+apply plugin: 'maven-publish'
+apply plugin: 'org.spongepowered.mixin'
+
+
+//Build variables
+version = "1.0.0"
+group = "lv.id.bonne.vhdiscord"
+archivesBaseName = "VaultHuntersDiscordIntegration"
+
+java.toolchain.languageVersion = JavaLanguageVersion.of(17)
+
+//Gradle Repositories
+repositories {
+    maven { url 'https://jitpack.io' }
+    maven {
+        name = 'sponge'
+        url = 'https://repo.spongepowered.org/maven'
+    }
+    maven { url "https://nexus.vankka.dev/repository/maven-public/" }
+    maven { url "https://repository.dev.gotan.io/repository/gotan.os/" }
+    maven { url "https://repo.opencollab.dev/maven-snapshots" }
+    maven { url "https://repo.opencollab.dev/maven-releases" }
+    maven {
+        name = 'sonatype-oss'
+        url = 'https://oss.sonatype.org/content/repositories/snapshots/'
+    }
+    flatDir {
+        dirs 'libs'
+    }
+    maven { url "https://repo.erdbeerbaerlp.de/repository/maven-public/" }
+    maven { url "https://cursemaven.com" }
+}
+
+//Forge
+minecraft {
+    mappings channel: 'official', version: "${project.mcVersion}"
+}
+
+
+//ShadowJar
+configurations {
+    embed
+    compileOnly.extendsFrom(embed)
+}
+
+task release{
+
+}
+
+shadowJar {
+    archiveClassifier = "${project.mcVersion}"
+    configurations = [project.configurations.embed]
+    relocate 'org.slf4j', 'dcshadow.org.slf4j'
+}
+
+reobf {
+    shadowJar {
+        dependsOn tasks.createMcpToSrg
+        mappings = tasks.createMcpToSrg.outputs.files.singleFile
+    }
+}
+
+artifacts {
+    archives tasks.shadowJar
+}
+
+configurations.all {
+    resolutionStrategy {
+        cacheChangingModulesFor 5, 'minutes'
+    }
+}
+
+//Dependencies
+dependencies {
+    // =========  Minecraft Forge =============
+    minecraft "net.minecraftforge:forge:${project.mcVersion}-40.1.61"
+
+    //Mixin
+    annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
+
+    //DCIntegration-API
+    compileOnly 'de.erdbeerbaerlp:dcintegration.common:2.5.0'
+    compileOnly group: 'org.apache.logging.log4j', name: 'log4j-api', version: '2.17.1'
+
+    // Curseforge mod dependencies
+    implementation fg.deobf("curse.maven:vault-hunters-official-mod-458203:${project.vhVersion}")
+    implementation fg.deobf("curse.maven:dcintegration-324952:4054862")
+    implementation fg.deobf("curse.maven:mc2discord-325235:4119890")
+}
+
+
+//Mixin
+mixin {
+    add sourceSets.main, 'mixins.vhdiscord.refmap.json'
+    config 'mixins.vhdiscord.dcintegration.json'
+    config 'mixins.vhdiscord.mc2discord.json'
+}
+
+//Manifest attributes
+jar {
+    archiveClassifier = "${project.mcVersion}"
+    manifest {
+        attributes([
+                'Maven-Artifact'          : "${project.group}:${project.archivesBaseName}:${project.version}",
+                'Timestamp'               : System.currentTimeMillis(),
+                "Specification-Title"     : "vhdiscord",
+                "Specification-Vendor"    : "vhdiscord",
+                "Specification-Version"   : "1", // We are version 1 of ourselves
+                "Implementation-Title"    : project.name,
+                "Implementation-Version"  : "${project.version}",
+                "Implementation-Vendor"   : "vhdiscord",
+                "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ"),
+                'MixinConnector'          : 'lv.id.bonne.vhdiscord.config.VHDiscordMixinConnector'
+        ])
+    }
+}
+
+//Curseforge publishing
+curseforge {
+    if (project.hasProperty('curseforge.apikey')) { // $GRADLE_USER_HOME/gradle.properties
+        apiKey = getProperty("curseforge.apikey")
+        project {
+            //id = '324952'
+            changelog = project.changelog
+            releaseType = project.releaseType.toLowerCase()
+            addGameVersion "${project.mcVersion}"
+            mainArtifact(jar) {
+                displayName = "VaultHunters Discord Integration- $version (MC ${project.mcVersion})"
+            }
+            //relations {
+            //}
+        }
+    }
+}
+
+tasks.release.dependsOn(tasks.build, tasks.curseforge)

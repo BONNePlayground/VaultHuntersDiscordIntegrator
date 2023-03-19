@@ -1,0 +1,11 @@
+{
+  "package": "lv.id.bonne.vhdiscord.dcintegration.mixin",
+  "refmap": "mixins.vhdiscord.refmap.json",
+  "minVersion": "0.8",
+  "compatibilityLevel": "JAVA_17",
+  "plugin": "lv.id.bonne.vhdiscord.dcintegration.DiscordIntegrationModConfiguration",
+  "server": [
+    "MixinPlayerVaultInteraction",
+    "MixinForgeMessageUtils"
+  ]
+}
