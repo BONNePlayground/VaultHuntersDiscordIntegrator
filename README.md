@@ -18,3 +18,6 @@ This mod hooks with discord bots and adds Vault Hunter related things in them.
   - Trinket Item
   - Relic Fragment Item
   - Vault Catalyst Infused Item
+
+### Example Vault Sword
+![vault_sword](https://user-images.githubusercontent.com/1344358/226194742-838d4a67-cc9a-497b-a37c-95f66c681cdc.png)
