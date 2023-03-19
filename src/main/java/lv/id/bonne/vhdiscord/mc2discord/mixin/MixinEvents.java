@@ -181,8 +181,10 @@ public class MixinEvents
             new TranslatableComponent(itemStack.getItem().getDescriptionId()).getContents();
 
         String title = itemName.isBlank() ?
-            "[" + Objects.requireNonNull(itemStack.getItem().getRegistryName()) + "]" :
+            itemStack.getHoverName().getString() :
             itemName;
+
+        String footer = Objects.requireNonNull(itemStack.getItem().getRegistryName()).toString();
 
         Mc2Discord.INSTANCE.config.channels.channels.forEach(channel -> {
 
@@ -195,6 +197,7 @@ public class MixinEvents
                         EmbedCreateSpec embedSpec = EmbedCreateSpec.builder().
                             title(title).
                             description(description).
+                            footer(footer, null).
                             build();
 
                         MixinEvents.sendWebhookMessage(channel.channel_id,
