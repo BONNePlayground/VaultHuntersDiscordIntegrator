@@ -47,6 +47,6 @@ side = "SERVER"
 [[dependencies.vhdiscord]]
 modId = "mc2discord"
 mandatory = false
-versionRange = "[3.3.0]"
+versionRange = "[3.3.0,)"
 ordering = "AFTER"
 side = "SERVER"
