@@ -41,7 +41,7 @@ side = "SERVER"
 [[dependencies.vhdiscord]]
 modId = "dcintegration"
 mandatory = false
-versionRange = "[2.5.0]"
+versionRange = "[2.5.0,)"
 ordering = "AFTER"
 side = "SERVER"
 [[dependencies.vhdiscord]]

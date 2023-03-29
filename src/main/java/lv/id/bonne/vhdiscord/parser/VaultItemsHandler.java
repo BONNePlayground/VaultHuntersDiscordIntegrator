@@ -9,6 +9,7 @@ package lv.id.bonne.vhdiscord.parser;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonPrimitive;
 import java.text.DecimalFormat;
 import java.util.*;
 import java.util.function.Predicate;
@@ -918,30 +919,50 @@ public class VaultItemsHandler
         if (layout instanceof ArchitectCrystalLayout)
         {
             StringBuilder builder = new StringBuilder();
-            builder.append("Architect").append("\n");
+            builder.append("Architect");
 
             Optional<JsonObject> jsonObject = layout.writeJson();
 
-            jsonObject.ifPresent(json -> {
-                JsonArray entries = json.getAsJsonArray("entries");
+            jsonObject.ifPresent(json ->
+            {
+                if (json.has("completion"))
+                {
+                    JsonPrimitive completionObject = json.getAsJsonPrimitive("completion");
 
-                entries.forEach(entry -> {
-                    ArchitectRoomEntry architectRoomEntry = ArchitectRoomEntry.fromJson((JsonObject) entry);
-                    Component roomName = architectRoomEntry.getName();
-
-                    if (roomName != null)
+                    if (completionObject.isNumber())
                     {
-                        int count = architectRoomEntry.get(ArchitectRoomEntry.COUNT);
-
-                        builder.append("-Has ").
-                            append(String.valueOf(count)).
-                            append(" *").
-                            append(roomName.getString()).
-                            append("* ").
-                            append(count > 1 ? "Rooms" : "Room").
-                            append("\n");
+                        float completion = json.getAsJsonPrimitive("completion").getAsFloat();
+                        builder.append(" | ").
+                            append(Math.min(100.0F, Math.round(completion * 100.0F))).
+                            append("%");
                     }
-                });
+                }
+
+                builder.append("\n");
+
+                if (json.has("entries") && json.get("entries").isJsonArray())
+                {
+                    JsonArray entries = json.getAsJsonArray("entries");
+
+                    entries.forEach(entry ->
+                    {
+                        ArchitectRoomEntry architectRoomEntry = ArchitectRoomEntry.fromJson((JsonObject) entry);
+                        Component roomName = architectRoomEntry.getName();
+
+                        if (roomName != null)
+                        {
+                            int count = architectRoomEntry.get(ArchitectRoomEntry.COUNT);
+
+                            builder.append("-Has ").
+                                append(count).
+                                append(" *").
+                                append(roomName.getString()).
+                                append("* ").
+                                append(count > 1 ? "Rooms" : "Room").
+                                append("\n");
+                        }
+                    });
+                }
             });
 
             return builder.toString();
