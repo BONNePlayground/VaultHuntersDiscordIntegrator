@@ -35,6 +35,7 @@ import iskallia.vault.gear.attribute.VaultGearModifier;
 import iskallia.vault.gear.data.AttributeGearData;
 import iskallia.vault.gear.data.VaultGearData;
 import iskallia.vault.gear.item.VaultGearItem;
+import iskallia.vault.gear.tooltip.GearTooltip;
 import iskallia.vault.gear.trinket.TrinketEffect;
 import iskallia.vault.init.*;
 import iskallia.vault.item.*;
@@ -57,10 +58,7 @@ import iskallia.vault.item.gear.TrinketItem;
 import iskallia.vault.item.tool.PaxelItem;
 import iskallia.vault.util.MiscUtils;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.*;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -86,7 +84,12 @@ public class VaultItemsHandler
         {
             StringBuilder builder = new StringBuilder();
 
-            if (itemStack.getItem() instanceof VaultGearItem)
+            if (itemStack.getItem() instanceof BottleItem)
+            {
+                VaultItemsHandler.handleBottleTooltip(builder, itemStack);
+                return builder.toString();
+            }
+            else if (itemStack.getItem() instanceof VaultGearItem)
             {
                 VaultItemsHandler.handleGearTooltip(builder, itemStack);
                 return builder.toString();
@@ -252,6 +255,64 @@ public class VaultItemsHandler
             {
                 VaultItemsHandler.addAffixList(builder, data, VaultGearModifier.AffixType.SUFFIX, itemStack);
             }
+        }
+    }
+
+
+    /**
+     * This method parses bottle item into discord chat.
+     * @param builder Embed Builder.
+     * @param itemStack Bottle Item.
+     */
+    public static void handleBottleTooltip(StringBuilder builder, ItemStack itemStack)
+    {
+        BottleItem.getType(itemStack).ifPresent(type -> {
+            builder.append("Heals ").
+                append(type.getHealing()).
+                append(" hitpoints\n");
+
+            BottleItem.getRecharge(itemStack).ifPresent(recharge -> {
+                switch (recharge)
+                {
+                    case TIME ->
+                        builder.append("Recharges every ").
+                            append(type.getTimeRecharge() / 1200).
+                            append(" minutes").
+                            append("\n");
+                    case MOBS ->
+                        builder.append("Recharges every ").
+                            append(type.getMobRecharge()).
+                            append(" mob kills").
+                            append("\n");
+                }
+            });
+        });
+
+        VaultGearData data = VaultGearData.read(itemStack);
+
+        List<VaultGearModifier<?>> implicits = data.getModifiers(VaultGearModifier.AffixType.IMPLICIT);
+
+        if (!implicits.isEmpty())
+        {
+            VaultItemsHandler.addAffixList(builder, data, VaultGearModifier.AffixType.IMPLICIT, itemStack);
+            builder.append("\n");
+        }
+
+        int maxPrefixes = data.getFirstValue(ModGearAttributes.PREFIXES).orElse(0);
+        List<VaultGearModifier<?>> prefixes = data.getModifiers(VaultGearModifier.AffixType.PREFIX);
+
+        if (maxPrefixes > 0 || !prefixes.isEmpty())
+        {
+            VaultItemsHandler.addAffixList(builder, data, VaultGearModifier.AffixType.PREFIX, itemStack);
+            builder.append("\n");
+        }
+
+        int maxSuffixes = data.getFirstValue(ModGearAttributes.SUFFIXES).orElse(0);
+        List<VaultGearModifier<?>> suffixes = data.getModifiers(VaultGearModifier.AffixType.SUFFIX);
+
+        if (maxSuffixes > 0 || !suffixes.isEmpty())
+        {
+            VaultItemsHandler.addAffixList(builder, data, VaultGearModifier.AffixType.SUFFIX, itemStack);
         }
     }
 
