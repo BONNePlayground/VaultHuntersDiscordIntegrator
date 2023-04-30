@@ -33,7 +33,7 @@ apply plugin: 'org.spongepowered.mixin'
 
 
 //Build variables
-version = "1.0.1"
+version = "1.1.0"
 group = "lv.id.bonne.vhdiscord"
 archivesBaseName = "VaultHuntersDiscordIntegration"
 
