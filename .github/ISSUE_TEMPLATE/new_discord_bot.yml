@@ -1,0 +1,31 @@
+name: New Discord Bot integration
+description: Suggest connection with a different discord bot
+labels: "Type: Enhancement"
+body:
+  - type: markdown
+    attributes:
+      value: Thank you for requesting VH integration with a different bot! Please be as detailed as possible so that we may consider and review the request easier.
+
+  - type: textarea
+    attributes:
+      label: Which Discord Bot integration you would like to be implemented?
+      description: Please provide CurseForge link to the mod.
+    validations:
+      required: true
+
+  - type: checkboxes
+    attributes:
+      label: Agreements
+      description: Please agree to the following.
+      options:
+        - label: I have searched for and ensured there isn't already an open issue regarding this.
+          required: true
+        - label: I have ensured the feature I'm requesting isn't already in the latest VaultHunters DC-Bot Connector.
+          required: true
+
+  - type: textarea
+    attributes:
+      label: Other
+      description: Add any other context or screenshots about the feature request below.
+    validations:
+      required: false

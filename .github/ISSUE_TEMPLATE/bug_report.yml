@@ -1,0 +1,44 @@
+name: Bug
+description: Something isn't right. Looks like a bug.
+labels: "Type: Bug"
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Before reporting a bug here, please make sure you are on the latest version of VH and VHDiscordIntegration or one that we're still supporting.
+
+  - type: textarea
+    attributes:
+      label: Expected behavior
+      description: What you expected to see.
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Observed/Actual behavior
+      description: What you actually saw.
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Steps/models to reproduce
+      description: This may include a paste of the console error, a video, or detailed step by step instructions to help reconstruct the issue.
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: VaultHunters version
+      description: |
+        Please provide which VaultHunters version you are using, VaultHunters DC-Bot Connector version and your discord bod integration version.
+    validations:
+      required: true
+
+  - type: textarea
+    attributes:
+      label: Other
+      description: |
+        Please include other helpful information below.
+        The more information we receive, the quicker and more effective we can be at finding the solution to the issue.
+    validations:
+      required: false
+
