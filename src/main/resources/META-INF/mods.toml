@@ -36,7 +36,7 @@ side = "BOTH"
 modId = "the_vault"
 mandatory = true
 ordering = "AFTER"
-versionRange = "[1.18.2-3.8.0.1681,)"
+versionRange = "[1.18.2-3.8.0.2165,)"
 side = "SERVER"
 [[dependencies.vhdiscord]]
 modId = "dcintegration"
