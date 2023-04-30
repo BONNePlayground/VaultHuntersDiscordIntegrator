@@ -150,15 +150,18 @@ curseforge {
     if (project.hasProperty('curseforge.apikey')) { // $GRADLE_USER_HOME/gradle.properties
         apiKey = getProperty("curseforge.apikey")
         project {
-            //id = '324952'
+            id = '839602'
             changelog = project.changelog
             releaseType = project.releaseType.toLowerCase()
             addGameVersion "${project.mcVersion}"
             mainArtifact(jar) {
-                displayName = "VaultHunters Discord Integration- $version (MC ${project.mcVersion})"
+                displayName = "${project.archivesBaseName}-${project.version}-${project.mcVersion}"
             }
-            //relations {
-            //}
+            relations {
+                optionalDependency("dcintegration")
+                optionalDependency("mc2discord")
+                requiredDependency("vault-hunters-official-mod")
+            }
         }
     }
 }
