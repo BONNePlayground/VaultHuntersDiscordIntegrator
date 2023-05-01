@@ -109,12 +109,12 @@ dependencies {
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 
     //DCIntegration-API
-    compileOnly 'de.erdbeerbaerlp:dcintegration.common:2.5.0'
+    compileOnly 'de.erdbeerbaerlp:dcintegration.common:2.6.4'
     compileOnly group: 'org.apache.logging.log4j', name: 'log4j-api', version: '2.17.1'
 
     // Curseforge mod dependencies
     implementation fg.deobf("curse.maven:vault-hunters-official-mod-458203:${project.vhVersion}")
-    implementation fg.deobf("curse.maven:dcintegration-324952:4054862")
+    implementation fg.deobf("curse.maven:dcintegration-324952:4452457")
     implementation fg.deobf("curse.maven:mc2discord-325235:4119890")
 }
 

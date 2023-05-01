@@ -17,7 +17,7 @@ import java.util.UUID;
 import de.erdbeerbaerlp.dcintegration.common.storage.Configuration;
 import de.erdbeerbaerlp.dcintegration.common.util.DiscordMessage;
 import de.erdbeerbaerlp.dcintegration.common.util.Variables;
-import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
+import net.dv8tion.jda.api.entities.channel.middleman.MessageChannel;
 import net.minecraft.network.chat.ChatType;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
@@ -63,7 +63,8 @@ public class MixinPlayerVaultInteraction
         {
             if (Variables.discord_instance != null)
             {
-                TextChannel channel = Variables.discord_instance.getChannel(Configuration.instance().advanced.chatOutputChannelID);
+                MessageChannel channel =
+                    Variables.discord_instance.getChannel(Configuration.instance().advanced.chatOutputChannelID);
 
                 if (channel == null)
                 {
