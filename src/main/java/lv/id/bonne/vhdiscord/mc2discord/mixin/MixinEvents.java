@@ -275,10 +275,10 @@ public class MixinEvents
 
                     Mono<Void> webHook = webhook.execute(builder.build());
                     Logger logger = Mc2Discord.logger;
-                    logger.getClass();
+
                     webHook.doOnError(logger::error).subscribe(
                         (unused) -> {},
-                        (throwable) -> DiscordLogging.logs = "",
+                        (throwable) -> DiscordLogging.logs = "Cannot send webhook message.",
                         null);
                 });
             });
@@ -311,10 +311,11 @@ public class MixinEvents
 
                     Mono mono = textChannel.createMessage(builder.build());
                     Logger logger = Mc2Discord.logger;
-                    logger.getClass();
+
                     mono.doOnError(logger::error).subscribe(
                         (unused) -> {},
-                        (throwable) -> DiscordLogging.logs = "", null);
+                        (throwable) -> DiscordLogging.logs = "Cannot send chat message.",
+                        null);
                 });
             });
     }
@@ -350,9 +351,9 @@ public class MixinEvents
                 Mono mono = textChannel.createMessage(builder1.build());
                 Logger logger = Mc2Discord.logger;
 
-                logger.getClass();
-                mono.doOnError(logger::error).subscribe((unused) -> {},
-                    (throwable) -> DiscordLogging.logs = "",
+                mono.doOnError(logger::error).subscribe(
+                    (unused) -> {},
+                    (throwable) -> DiscordLogging.logs = "Cannot send embed message.",
                     null);
             });
         });
