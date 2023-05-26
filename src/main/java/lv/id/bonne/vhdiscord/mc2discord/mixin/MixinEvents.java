@@ -70,7 +70,7 @@ public class MixinEvents
     @Overwrite(remap = false)
     public static void onMinecraftChatMessageEvent(ServerChatEvent event)
     {
-        boolean messageParsed = false;
+        boolean messageParsed;
 
         final net.minecraft.network.chat.Component msg = event.getComponent();
         final JsonObject json = JsonParser.parseString(Component.Serializer.toJson(msg)).getAsJsonObject();
@@ -79,37 +79,58 @@ public class MixinEvents
             event.getPlayer().getDisplayName().getString(),
             event.getPlayer().getGameProfile().getId());
 
-        if (json.has("with"))
+        if (json.has("with") && json.get("with").isJsonArray())
         {
-            final JsonArray withArray = json.getAsJsonArray("with");
-
-            for (JsonElement object : withArray)
-            {
-                if (object instanceof JsonObject singleElement)
-                {
-                    if (singleElement.has("hoverEvent"))
-                    {
-                        final JsonObject hoverEvent = singleElement.getAsJsonObject("hoverEvent");
-
-                        if (hoverEvent.has("action") &&
-                            hoverEvent.get("action").getAsString().equals("show_item") &&
-                            hoverEvent.has("contents"))
-                        {
-                            if (hoverEvent.getAsJsonObject("contents").has("tag"))
-                            {
-                                messageParsed = MixinEvents.parseAndSendMessage(player,
-                                    hoverEvent.getAsJsonObject("contents").getAsJsonObject());
-                            }
-                        }
-                    }
-                }
-            }
+            messageParsed = MixinEvents.searchAndParseArray(player, json.getAsJsonArray("with"));
+        }
+        else if (json.has("extra") && json.get("extra").isJsonArray())
+        {
+            messageParsed = MixinEvents.searchAndParseArray(player, json.getAsJsonArray("extra"));
+        }
+        else
+        {
+            messageParsed = false;
         }
 
         if (!messageParsed)
         {
             MinecraftEvents.onMinecraftChatMessageEvent(event.getMessage(), player);
         }
+    }
+
+
+    /**
+     * This method search for "show_item" hoverEvent and crafts MessageEmbed for VaultHunters items
+     * from it.
+     * @param player Player who sends the chat message.
+     * @param array of json objects.
+     * @return MessageEmbed text for item, or null.
+     */
+    private static boolean searchAndParseArray(Player player, JsonArray array)
+    {
+        for (JsonElement object : array)
+        {
+            if (object instanceof JsonObject singleElement)
+            {
+                if (singleElement.has("hoverEvent"))
+                {
+                    final JsonObject hoverEvent = singleElement.getAsJsonObject("hoverEvent");
+
+                    if (hoverEvent.has("action") &&
+                        hoverEvent.get("action").getAsString().equals("show_item") &&
+                        hoverEvent.has("contents"))
+                    {
+                        if (hoverEvent.getAsJsonObject("contents").has("tag"))
+                        {
+                            return MixinEvents.parseAndSendMessage(player,
+                                hoverEvent.getAsJsonObject("contents").getAsJsonObject());
+                        }
+                    }
+                }
+            }
+        }
+
+        return false;
     }
 
 

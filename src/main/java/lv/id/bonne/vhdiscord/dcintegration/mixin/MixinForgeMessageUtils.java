@@ -62,27 +62,47 @@ public class MixinForgeMessageUtils
 
         final JsonObject json = JsonParser.parseString(Component.Serializer.toJson(component)).getAsJsonObject();
 
-        if (json.has("with"))
+        if (json.has("with") && json.get("with").isJsonArray())
         {
-            final JsonArray withArray = json.getAsJsonArray("with");
+            // This is how quarks shares items in chat.
+            return MixinForgeMessageUtils.searchAndParseArray(json.getAsJsonArray("with"));
+        }
+        else if (json.has("extra") && json.get("extra").isJsonArray())
+        {
+            // This is how FTBRank shares items in chat.
+            return MixinForgeMessageUtils.searchAndParseArray(json.getAsJsonArray("extra"));
+        }
+        else
+        {
+            return null;
+        }
+    }
 
-            for (JsonElement object : withArray)
+
+    /**
+     * This method search for "show_item" hoverEvent and crafts MessageEmbed for VaultHunters items
+     * from it.
+     * @param array of json objects.
+     * @return MessageEmbed text for item, or null.
+     */
+    private static MessageEmbed searchAndParseArray(JsonArray array)
+    {
+        for (JsonElement object : array)
+        {
+            if (object instanceof JsonObject singleElement)
             {
-                if (object instanceof JsonObject singleElement)
+                if (singleElement.has("hoverEvent"))
                 {
-                    if (singleElement.has("hoverEvent"))
-                    {
-                        final JsonObject hoverEvent = singleElement.getAsJsonObject("hoverEvent");
+                    final JsonObject hoverEvent = singleElement.getAsJsonObject("hoverEvent");
 
-                        if (hoverEvent.has("action") &&
-                            hoverEvent.get("action").getAsString().equals("show_item") &&
-                            hoverEvent.has("contents"))
+                    if (hoverEvent.has("action") &&
+                        hoverEvent.get("action").getAsString().equals("show_item") &&
+                        hoverEvent.has("contents"))
+                    {
+                        if (hoverEvent.getAsJsonObject("contents").has("tag"))
                         {
-                            if (hoverEvent.getAsJsonObject("contents").has("tag"))
-                            {
-                                return MixinForgeMessageUtils.parseJsonArgs(
-                                    hoverEvent.getAsJsonObject("contents").getAsJsonObject());
-                            }
+                            return MixinForgeMessageUtils.parseJsonArgs(
+                                hoverEvent.getAsJsonObject("contents").getAsJsonObject());
                         }
                     }
                 }
