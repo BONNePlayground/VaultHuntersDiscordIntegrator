@@ -64,7 +64,7 @@ public class MixinPlayerVaultInteraction
             if (Variables.discord_instance != null)
             {
                 MessageChannel channel =
-                    Variables.discord_instance.getChannel(Configuration.instance().advanced.chatOutputChannelID);
+                    Variables.discord_instance.getChannel(Configuration.instance().advanced.serverChannelID);
 
                 if (channel == null)
                 {
