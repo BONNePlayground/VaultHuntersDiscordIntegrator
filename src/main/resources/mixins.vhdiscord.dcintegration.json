@@ -6,6 +6,7 @@
   "plugin": "lv.id.bonne.vhdiscord.dcintegration.DiscordIntegrationModConfiguration",
   "server": [
     "MixinPlayerVaultInteraction",
-    "MixinForgeMessageUtils"
+    "MixinForgeMessageUtils",
+    "MixinMiscUtils"
   ]
 }
