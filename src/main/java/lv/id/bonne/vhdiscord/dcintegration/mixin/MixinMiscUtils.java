@@ -32,7 +32,7 @@ public class MixinMiscUtils
      * @param message Message that was sent to players
      * @param ci Callback info
      */
-    @Inject(method = "broadcast(Lnet/minecraft/network/chat/Component;)V", at = @At("RETURN"))
+    @Inject(method = "broadcast(Lnet/minecraft/network/chat/Component;)V", at = @At("RETURN"), remap = false)
     private static void broadcastMessageToDiscord(Component message, CallbackInfo ci)
     {
         if (Variables.discord_instance != null)
