@@ -33,7 +33,6 @@ apply plugin: 'org.spongepowered.mixin'
 
 
 //Build variables
-version = "1.1.2"
 group = "lv.id.bonne.vhdiscord"
 archivesBaseName = "VaultHuntersDiscordIntegration"
 
@@ -114,8 +113,8 @@ dependencies {
 
     // Curseforge mod dependencies
     implementation fg.deobf("curse.maven:vault-hunters-official-mod-458203:${project.vhVersion}")
-    implementation fg.deobf("curse.maven:dcintegration-324952:4452457")
-    implementation fg.deobf("curse.maven:mc2discord-325235:4119890")
+    implementation fg.deobf("curse.maven:dcintegration-324952:${project.dcintegration}")
+    implementation fg.deobf("curse.maven:mc2discord-325235:${project.mc2discord}")
 }
 
 
