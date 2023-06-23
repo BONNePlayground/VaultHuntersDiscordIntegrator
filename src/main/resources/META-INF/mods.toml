@@ -50,3 +50,9 @@ mandatory = false
 versionRange = "[3.3.0,)"
 ordering = "AFTER"
 side = "SERVER"
+[[dependencies.vhdiscord]]
+modId = "sdlink"
+mandatory = false
+versionRange = "[2.2.0,)"
+ordering = "AFTER"
+side = "SERVER"

@@ -21,5 +21,6 @@ public class VHDiscordMixinConnector implements IMixinConnector
     public void connect() {
         Mixins.addConfiguration("mixins.vhdiscord.dcintegration.json");
         Mixins.addConfiguration("mixins.vhdiscord.mc2discord.json");
+        Mixins.addConfiguration("mixins.vhdiscord.sdlink.json");
     }
 }

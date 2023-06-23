@@ -115,6 +115,7 @@ dependencies {
     implementation fg.deobf("curse.maven:vault-hunters-official-mod-458203:${project.vhVersion}")
     implementation fg.deobf("curse.maven:dcintegration-324952:${project.dcintegration}")
     implementation fg.deobf("curse.maven:mc2discord-325235:${project.mc2discord}")
+    implementation fg.deobf("curse.maven:simple-discord-link-bot-forge-fabric-spigot-541320:${project.sdlink}")
 }
 
 
@@ -123,6 +124,7 @@ mixin {
     add sourceSets.main, 'mixins.vhdiscord.refmap.json'
     config 'mixins.vhdiscord.dcintegration.json'
     config 'mixins.vhdiscord.mc2discord.json'
+    config 'mixins.vhdiscord.sdlink.json'
 }
 
 //Manifest attributes
@@ -159,6 +161,7 @@ curseforge {
             relations {
                 optionalDependency("dcintegration")
                 optionalDependency("mc2discord")
+                optionalDependency("sdlink")
                 requiredDependency("vault-hunters-official-mod")
             }
         }

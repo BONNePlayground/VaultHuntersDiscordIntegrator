@@ -1,0 +1,12 @@
+{
+  "package": "lv.id.bonne.vhdiscord.sdlink.mixin",
+  "refmap": "mixins.vhdiscord.refmap.json",
+  "minVersion": "0.8",
+  "compatibilityLevel": "JAVA_17",
+  "plugin": "lv.id.bonne.vhdiscord.sdlink.SDLinkModConfiguration",
+  "server": [
+    "MixinForgeEventsHandler",
+    "MixinMiscUtils",
+    "MixinPlayerVaultInteraction"
+  ]
+}
