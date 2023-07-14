@@ -268,22 +268,30 @@ public class VaultItemsHandler
     {
         BottleItem.getType(itemStack).ifPresent(type -> {
             builder.append("Heals ").
-                append(type.getHealing()).
+                append(ModConfigs.POTION.getPotion(type).getHealing()).
                 append(" hitpoints\n");
 
             BottleItem.getRecharge(itemStack).ifPresent(recharge -> {
                 switch (recharge)
                 {
                     case TIME ->
+                    {
+                        int time = ModConfigs.POTION.getPotion(type).getTimeRecharge();
+
                         builder.append("Recharges every ").
-                            append(type.getTimeRecharge() / 1200).
+                            append(time / 1200).
                             append(" minutes").
                             append("\n");
+                    }
                     case MOBS ->
+                    {
+                        int mobs = ModConfigs.POTION.getPotion(type).getMobRecharge();
+
                         builder.append("Recharges every ").
-                            append(type.getMobRecharge()).
+                            append(mobs).
                             append(" mob kills").
                             append("\n");
+                    }
                 }
             });
         });
