@@ -35,10 +35,10 @@ import iskallia.vault.gear.attribute.VaultGearModifier;
 import iskallia.vault.gear.data.AttributeGearData;
 import iskallia.vault.gear.data.VaultGearData;
 import iskallia.vault.gear.item.VaultGearItem;
-import iskallia.vault.gear.tooltip.GearTooltip;
 import iskallia.vault.gear.trinket.TrinketEffect;
 import iskallia.vault.init.*;
 import iskallia.vault.item.*;
+import iskallia.vault.item.bottle.BottleItem;
 import iskallia.vault.item.crystal.CrystalData;
 import iskallia.vault.item.crystal.CrystalModifiers;
 import iskallia.vault.item.crystal.VaultCrystalItem;
@@ -266,62 +266,41 @@ public class VaultItemsHandler
      */
     public static void handleBottleTooltip(StringBuilder builder, ItemStack itemStack)
     {
+        if (ModConfigs.POTION == null)
+        {
+            // Potions are not defined.
+            return;
+        }
+
         BottleItem.getType(itemStack).ifPresent(type -> {
-            builder.append("Heals ").
-                append(ModConfigs.POTION.getPotion(type).getHealing()).
-                append(" hitpoints\n");
+            builder.append(itemStack.getDisplayName()).append("\n");
 
             BottleItem.getRecharge(itemStack).ifPresent(recharge -> {
                 switch (recharge)
                 {
-                    case TIME ->
-                    {
-                        int time = ModConfigs.POTION.getPotion(type).getTimeRecharge();
-
-                        builder.append("Recharges every ").
-                            append(time / 1200).
-                            append(" minutes").
-                            append("\n");
-                    }
-                    case MOBS ->
-                    {
-                        int mobs = ModConfigs.POTION.getPotion(type).getMobRecharge();
-
-                        builder.append("Recharges every ").
-                            append(mobs).
-                            append(" mob kills").
-                            append("\n");
-                    }
+                    case TIME -> builder.append("Passively restores charges while inside a vault").append("\n");
+                    case MOBS -> builder.append("Kill vault mobs to restore charges").append("\n");
+                    case CHESTS -> builder.append("Loot vault chests to restore charges").append("\n");
                 }
             });
+
+            builder.append("Consume a charge to").
+                append("\n").
+                append(" ").
+                append(DOT).
+                append(" Heal ").
+                append(ModConfigs.POTION.getPotion(type).getHealing()).
+                append(" Hit Points").
+                append("\n");
+
+            BottleItem.getEffect(itemStack).ifPresent(effect -> {
+                builder.append(" ").
+                    append(DOT).
+                    append(" ").
+                    append(effect.getTooltip().getString()).
+                    append("\n");
+            });
         });
-
-        VaultGearData data = VaultGearData.read(itemStack);
-
-        List<VaultGearModifier<?>> implicits = data.getModifiers(VaultGearModifier.AffixType.IMPLICIT);
-
-        if (!implicits.isEmpty())
-        {
-            VaultItemsHandler.addAffixList(builder, data, VaultGearModifier.AffixType.IMPLICIT, itemStack);
-            builder.append("\n");
-        }
-
-        int maxPrefixes = data.getFirstValue(ModGearAttributes.PREFIXES).orElse(0);
-        List<VaultGearModifier<?>> prefixes = data.getModifiers(VaultGearModifier.AffixType.PREFIX);
-
-        if (maxPrefixes > 0 || !prefixes.isEmpty())
-        {
-            VaultItemsHandler.addAffixList(builder, data, VaultGearModifier.AffixType.PREFIX, itemStack);
-            builder.append("\n");
-        }
-
-        int maxSuffixes = data.getFirstValue(ModGearAttributes.SUFFIXES).orElse(0);
-        List<VaultGearModifier<?>> suffixes = data.getModifiers(VaultGearModifier.AffixType.SUFFIX);
-
-        if (maxSuffixes > 0 || !suffixes.isEmpty())
-        {
-            VaultItemsHandler.addAffixList(builder, data, VaultGearModifier.AffixType.SUFFIX, itemStack);
-        }
     }
 
 
