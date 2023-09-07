@@ -273,7 +273,7 @@ public class VaultItemsHandler
         }
 
         BottleItem.getType(itemStack).ifPresent(type -> {
-            builder.append(itemStack.getDisplayName()).append("\n");
+            builder.append(itemStack.getDisplayName().getString()).append("\n");
 
             BottleItem.getRecharge(itemStack).ifPresent(recharge -> {
                 switch (recharge)
