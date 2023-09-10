@@ -108,7 +108,7 @@ dependencies {
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 
     //DCIntegration-API
-    compileOnly 'de.erdbeerbaerlp:dcintegration.common:2.5.0'
+    compileOnly 'de.erdbeerbaerlp:dcintegration.common:3.0.2'
     compileOnly group: 'org.apache.logging.log4j', name: 'log4j-api', version: '2.17.1'
 
     // Curseforge mod dependencies
