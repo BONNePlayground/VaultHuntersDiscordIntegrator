@@ -78,10 +78,8 @@ public class MixinEvents {
 
         if (json.has("with") && json.get("with").isJsonArray()) {
             messageParsed = MixinEvents.vaultHuntersDiscordIntegrator$searchAndParseArray(player, json.getAsJsonArray("with"));
-            ci.cancel();
         } else if (json.has("extra") && json.get("extra").isJsonArray()) {
             messageParsed = MixinEvents.vaultHuntersDiscordIntegrator$searchAndParseArray(player, json.getAsJsonArray("extra"));
-            ci.cancel();
         }
 
         if (messageParsed) ci.cancel(); // Prevent Mc2Discord from sending message again.
