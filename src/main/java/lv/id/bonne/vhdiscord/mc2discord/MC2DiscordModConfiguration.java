@@ -19,6 +19,6 @@ public class MC2DiscordModConfiguration extends MixinConfigPlugin
     @Override
     public boolean shouldApplyMixin(String targetClassName, String mixinClassName)
     {
-        return LoadingModList.get().getModFileById("mc2discord") != null;
+        return LoadingModList.get().getModFileById("mc2discord") != null && !LoadingModList.get().getModFileById("mc2discord").versionString().startsWith("3");
     }
 }
