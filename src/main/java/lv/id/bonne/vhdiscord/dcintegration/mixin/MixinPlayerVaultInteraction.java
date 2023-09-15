@@ -7,6 +7,7 @@
 package lv.id.bonne.vhdiscord.dcintegration.mixin;
 
 
+import de.erdbeerbaerlp.dcintegration.common.DiscordIntegration;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -14,10 +15,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.UUID;
 
-import de.erdbeerbaerlp.dcintegration.common.storage.Configuration;
 import de.erdbeerbaerlp.dcintegration.common.util.DiscordMessage;
-import de.erdbeerbaerlp.dcintegration.common.util.Variables;
-import net.dv8tion.jda.api.entities.channel.middleman.MessageChannel;
 import net.minecraft.network.chat.ChatType;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
@@ -61,21 +59,12 @@ public class MixinPlayerVaultInteraction
             text.endsWith(" survived.") ||
             text.endsWith(" completed the Vault!"))
         {
-            if (Variables.discord_instance != null)
+            if (DiscordIntegration.INSTANCE != null)
             {
-                MessageChannel channel =
-                    Variables.discord_instance.getChannel(Configuration.instance().advanced.serverChannelID);
-
-                if (channel == null)
-                {
-                    // Channel is not setup. Do nothing.
-                    return;
-                }
-
                 // Set player name in bold.
                 text = text.replaceFirst(p.getName().getString(), "**" + p.getName().getString() + "**");
 
-                Variables.discord_instance.sendMessage(new DiscordMessage(text), channel);
+                DiscordIntegration.INSTANCE.sendMessage(new DiscordMessage(text));
             }
         }
     }
