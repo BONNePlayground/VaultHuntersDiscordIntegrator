@@ -39,12 +39,23 @@ public class MixinForgeMessageUtils {
             at = @At(value = "INVOKE_ASSIGN", target = "Lnet/minecraft/world/item/ItemStack;getOrCreateTag()Lnet/minecraft/nbt/CompoundTag;"),
             cancellable = true,
             locals = LocalCapture.CAPTURE_FAILSOFT)
-    private static void genItemStackEmbedIfAvailable(Component component, CallbackInfoReturnable<MessageEmbed> cir,
-        JsonObject json, JsonArray args, Iterator var3,
-        JsonElement el, JsonObject arg1, JsonObject hoverEvent,
-        JsonObject item, ItemStack is, CompoundTag itemTag) {
-        if (item.get("id").getAsString().startsWith("the_vault")) {
-            cir.setReturnValue(MixinForgeMessageUtils.vaultHuntersDiscordIntegrator$craftVaultHuntersItemMessage(item, is, itemTag));
+    private static void genItemStackEmbedIfAvailable(Component component,
+        CallbackInfoReturnable<MessageEmbed> cir,
+        JsonObject json,
+        JsonArray args,
+        Iterator var3,
+        JsonElement el,
+        JsonObject arg1,
+        JsonObject hoverEvent,
+        JsonObject item,
+        ItemStack is,
+        CompoundTag itemTag)
+    {
+        if (item.get("id").getAsString().startsWith("the_vault"))
+        {
+            cir.setReturnValue(MixinForgeMessageUtils.vaultHuntersDiscordIntegrator$craftVaultHuntersItemMessage(item,
+                is,
+                itemTag));
         }
     }
 
