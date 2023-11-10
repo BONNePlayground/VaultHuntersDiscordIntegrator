@@ -67,7 +67,6 @@ public class MixinEvents
      * @param event ServerChatEvent
      * @param ci CallbackInfo
      */
-    @SubscribeEvent
     @Inject(method = "onServerChat(Lnet/minecraftforge/event/ServerChatEvent;)V", at = @At("HEAD"), remap = false, cancellable = true)
     private static void onServerChat(ServerChatEvent event, CallbackInfo ci)
     {
