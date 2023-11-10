@@ -221,7 +221,7 @@ public class MixinEvents
                             build();
 
                     yield MessageManager.createWebhookMessage(channel.channel_id,
-                        "",
+                        " ",
                         Possible.of(player.displayName),
                         Possible.of(Entity.replace(Mc2Discord.INSTANCE.config.style.webhook_avatar_api,
                             List.of(player))),
