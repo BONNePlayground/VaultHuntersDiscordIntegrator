@@ -70,6 +70,9 @@ public class MixinPlayerVaultInteraction
             (text.contains(" entered a ") && text.endsWith("Vault!")) ||
             (text.contains(" entered an ") && text.endsWith("Vault!")) ||
             (text.contains(" defeated ") && text.endsWith("!")) ||
+            (text.contains(" completed a ") && text.endsWith(" Vault!")) ||
+            (text.contains(" survived a ") && text.endsWith(" Vault.")) ||
+            (text.contains(" was defeated in a ") && text.endsWith(" Vault.")) ||
             text.endsWith(" was defeated.") ||
             text.endsWith(" survived.") ||
             text.endsWith(" completed the Vault!"))
