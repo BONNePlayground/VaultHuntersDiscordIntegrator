@@ -40,7 +40,7 @@ public class MixinPlayerVaultInteraction
 
         String text = p_11265_.getString();
 
-        final ServerPlayer p = ServerLifecycleHooks.getCurrentServer().getPlayerList().getPlayer(p_11267_);
+       final ServerPlayer p = ServerLifecycleHooks.getCurrentServer().getPlayerList().getPlayer(p_11267_);
 
         if (p == null || !text.startsWith(p.getName().getString()))
         {
@@ -55,6 +55,9 @@ public class MixinPlayerVaultInteraction
             (text.contains(" entered a ") && text.endsWith("Vault!")) ||
             (text.contains(" entered an ") && text.endsWith("Vault!")) ||
             (text.contains(" defeated ") && text.endsWith("!")) ||
+            (text.contains(" completed a ") && text.endsWith(" Vault!")) ||
+            (text.contains(" survived a ") && text.endsWith(" Vault.")) ||
+            (text.contains(" was defeated in a ") && text.endsWith(" Vault.")) ||
             text.endsWith(" was defeated.") ||
             text.endsWith(" survived.") ||
             text.endsWith(" completed the Vault!"))
